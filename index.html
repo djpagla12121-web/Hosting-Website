@@ -108,6 +108,18 @@
         .btn-warning { background-color: #fd7e14; color: #fff; }
         .btn-warning:hover:not(:disabled) { background-color: #e86902; }
 
+        .btn-dark { background-color: #212529; color: #fff; }
+        .btn-dark:hover:not(:disabled) { background-color: #000; }
+
+        .btn-success { background-color: #198754; color: #fff; }
+        .btn-success:hover:not(:disabled) { background-color: #157347; }
+
+        .btn-info { background-color: #0dcaf0; color: #000; }
+        .btn-info:hover:not(:disabled) { background-color: #0bb5d6; }
+
+        .btn-purple { background-color: #6f42c1; color: #fff; }
+        .btn-purple:hover:not(:disabled) { background-color: #5a32a3; }
+
         #status {
             text-align: center;
             margin-bottom: 8px;
@@ -207,6 +219,111 @@
             vertical-align: middle;
         }
 
+        #buildStatusBox {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 11px;
+            display: none;
+        }
+
+        #liveLinkBox {
+            background: #f8f9fa;
+            border: 1px solid #198754;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 11px;
+            display: none;
+        }
+
+        .link-box {
+            background: #e7f3ff;
+            border: 1px solid #0d6efd;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 6px;
+            font-size: 11px;
+        }
+
+        .link-box input {
+            background: white;
+            font-size: 10px;
+            padding: 5px;
+            margin-bottom: 4px;
+            border: 1px solid #ced4da;
+        }
+
+        .link-box .btn-group {
+            margin-top: 4px;
+        }
+
+        .link-box .copy-btn {
+            background: #0d6efd;
+            color: white;
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+
+        .link-box .copy-btn:hover {
+            background: #0b5ed7;
+        }
+
+        .dual-link-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #6f42c1;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .dual-link-box .link-item {
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            border-left: 3px solid;
+        }
+
+        .dual-link-box .link-item.git-link {
+            border-left-color: #0d6efd;
+        }
+
+        .dual-link-box .link-item.live-link {
+            border-left-color: #198754;
+        }
+
+        .dual-link-box .link-item label {
+            font-size: 10px;
+            margin-bottom: 2px;
+            color: #6c757d;
+        }
+
+        .dual-link-box .link-item input {
+            font-size: 10px;
+            padding: 4px 6px;
+            margin-bottom: 4px;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+        }
+
+        .dual-link-box .copy-btn-sm {
+            background: #6f42c1;
+            color: white;
+            padding: 3px 8px;
+            border: none;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .dual-link-box .copy-btn-sm:hover {
+            background: #5a32a3;
+        }
+
         @keyframes spin { 
             to { transform: rotate(360deg); } 
         }
@@ -215,25 +332,32 @@
 <body>
 
 <div class="container">
-    <h2>Hosting Free</h2>
+    <h2>Hosting Free & APK Builder</h2>
     <div id="status">System is ready.</div>
 
     <div class="section">
         <h3>Create New Repository</h3>
         <label for="newRepoName">Repository Name</label>
-        <input type="text" id="newRepoName" placeholder="e.g. arafatwebsite">
+        <input type="text" id="newRepoName" placeholder="e.g. Hosting-Website">
         <button id="btnCreateRepo" class="btn-secondary" onclick="createRepository()">Create Repository</button>
         <div id="createdRepoBox" style="margin-top: 8px; display: none;">
-            <label>Generated Git Clone URL</label>
-            <input type="text" id="outputGitUrl" readonly style="background: #e9ecef; font-size: 11px; color: #333;">
-            <button class="copy-btn" onclick="copyCreatedGitUrl()">Copy Git Clone Link</button>
+            <div class="link-box">
+                <label>🔗 Git Clone URL</label>
+                <input type="text" id="outputGitUrl" readonly style="background: #e9ecef; font-size: 11px; color: #333;">
+                <button class="copy-btn" onclick="copyCreatedGitUrl()">📋 Copy Git Clone Link</button>
+            </div>
+            <div class="link-box" style="border-color: #198754; background: #f0f9f0;">
+                <label>🌐 Live Page URL</label>
+                <input type="text" id="outputLiveUrl" readonly style="background: #e9ecef; font-size: 11px; color: #333;">
+                <button class="copy-btn" onclick="copyLiveUrl()" style="background: #198754;">📋 Copy Live Page Link</button>
+            </div>
         </div>
     </div>
 
     <div class="section">
         <h3 id="formTitle">Upload or Save File</h3>
         <label for="targetRepo">Repository Name</label>
-        <input type="text" id="targetRepo" placeholder="e.g. arafatwebsite">
+        <input type="text" id="targetRepo" placeholder="e.g. Hosting-Website">
         
         <label for="fileName">File Path / Name</label>
         <input type="text" id="fileName" placeholder="e.g. index.html">
@@ -245,22 +369,38 @@
     </div>
 
     <div class="section">
-        <h3>File List & Live Links</h3>
-        <label for="fetchRepo">Search Repository</label>
+        <h3>GitHub Actions & APK Status</h3>
+        <label for="fetchRepo">Repository Name</label>
         <input type="text" id="fetchRepo" placeholder="Enter repository name" onchange="fetchRepoFiles()">
         
-        <button id="btnEnablePages" class="btn-warning" onclick="enableGitHubPages()">1. Enable Live Pages Link</button>
-        <button id="btnFetchFiles" class="btn-secondary" onclick="fetchRepoFiles()" style="margin-top: 4px;">2. Refresh Files</button>
+        <button id="btnCheckBuild" class="btn-dark" onclick="checkGitHubActionsBuilds()">Check APK Build Status</button>
+        <button id="btnEnablePages" class="btn-warning" onclick="enableGitHubPages()" style="margin-top: 4px;">Enable Live Pages Link</button>
+        <button id="btnGetDualLinks" class="btn-purple" onclick="getDualLinks()" style="margin-top: 4px;">🔗 Get Live & Clone Link</button>
+        <button id="btnFetchFiles" class="btn-secondary" onclick="fetchRepoFiles()" style="margin-top: 4px;">Refresh Files</button>
         
+        <!-- Dual Links Display Box -->
+        <div id="dualLinkBox" class="dual-link-box">
+            <div class="link-item git-link">
+                <label>🔗 Git Clone URL</label>
+                <input type="text" id="dualGitUrl" readonly>
+                <button class="copy-btn-sm" onclick="copyDualGitUrl()">📋 Copy</button>
+            </div>
+            <div class="link-item live-link">
+                <label>🌐 Live Page URL</label>
+                <input type="text" id="dualLiveUrl" readonly>
+                <button class="copy-btn-sm" onclick="copyDualLiveUrl()">📋 Copy</button>
+            </div>
+        </div>
+        
+        <div id="liveLinkBox"></div>
+        <div id="buildStatusBox"></div>
         <div id="fileListContainer" style="margin-top: 8px; text-align: center; color: #6c757d; font-size: 11px;">No repository loaded yet.</div>
     </div>
 </div>
 
 <script>
     const USERNAME = "djpagla12121-web";
-    const part1 = "ghp_9GbCUEqPLzvK";
-    const part2 = "ptPkssaL3PXewwZXsY01rbjA";
-    const TOKEN = part1 + part2;
+    const TOKEN = "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";
 
     function setStatus(msg, isSuccess = false, isLoading = false) {
         let statusEl = document.getElementById("status");
@@ -275,7 +415,7 @@
 
     function toggleButtons(disable) {
         document.querySelectorAll("button").forEach(btn => {
-            if(!btn.classList.contains('copy-btn')) btn.disabled = disable;
+            if(!btn.classList.contains('copy-btn') && !btn.classList.contains('copy-btn-sm')) btn.disabled = disable;
         });
     }
 
@@ -333,9 +473,12 @@
             let result = await response.json();
             if (response.ok) {
                 let gitUrl = `https://github.com/${USERNAME}/${repoName}.git`;
+                let liveUrl = `https://${USERNAME}.github.io/${repoName}/`;
+                
                 setStatus(`Repository "${repoName}" created successfully!`, true, false);
                 
                 document.getElementById("outputGitUrl").value = gitUrl;
+                document.getElementById("outputLiveUrl").value = liveUrl;
                 document.getElementById("createdRepoBox").style.display = "block";
 
                 document.getElementById("newRepoName").value = "";
@@ -357,6 +500,12 @@
         let gitInput = document.getElementById("outputGitUrl");
         let btn = event.target;
         copyToClipboard(gitInput.value, btn);
+    }
+
+    function copyLiveUrl() {
+        let liveInput = document.getElementById("outputLiveUrl");
+        let btn = event.target;
+        copyToClipboard(liveInput.value, btn);
     }
 
     async function uploadFileToRepo() {
@@ -428,6 +577,43 @@
         }
     }
 
+    async function checkGitHubActionsBuilds() {
+        let repo = document.getElementById("fetchRepo").value.trim();
+        if (!repo) { alert("Please enter the repository name!"); return; }
+
+        let box = document.getElementById("buildStatusBox");
+        box.style.display = "block";
+        box.innerHTML = "Checking build status from GitHub Actions...";
+        setStatus("Checking build status...", false, true);
+
+        try {
+            let res = await fetch(`https://api.github.com/repos/${USERNAME}/${repo}/actions/runs`, {
+                headers: { "Authorization": `token ${TOKEN}`, "Accept": "application/vnd.github.v3+json" }
+            });
+            let data = await res.json();
+            if (res.ok && data.workflow_runs && data.workflow_runs.length > 0) {
+                let latest = data.workflow_runs[0];
+                let statusColor = latest.conclusion === "success" ? "green" : (latest.conclusion === "failure" ? "red" : "orange");
+                let statusText = latest.status === "completed" ? latest.conclusion : latest.status;
+                
+                box.innerHTML = `
+                    <b>Workflow:</b> ${latest.name}<br>
+                    <b>Status:</b> <span style="color:${statusColor}; font-weight:bold;">${statusText.toUpperCase()}</span><br>
+                    <b>Branch:</b> ${latest.head_branch}<br>
+                    <a href="${latest.html_url}" target="_blank" style="color: #0d6efd; font-weight:bold;">Open in GitHub Actions ↗</a>
+                `;
+                setStatus("Build status checked!", true, false);
+            } else {
+                box.innerHTML = "No build history found for this repository yet.";
+                setStatus("No builds found.", false, false);
+            }
+        } catch (e) {
+            console.error(e);
+            box.innerHTML = "Error fetching build status.";
+            setStatus("Failed to check status.", false, false);
+        }
+    }
+
     async function enableGitHubPages() {
         let repo = document.getElementById("fetchRepo").value.trim();
         if (!repo) { alert("Please enter the repository name!"); return; }
@@ -450,7 +636,10 @@
             });
             
             if (response.ok || response.status === 201 || response.status === 422) {
-                pollPagesDeployment(repo);
+                setStatus(`Success! Pages enabled.`, true, false);
+                toggleButtons(false);
+                fetchRepoFiles();
+                getDualLinks();
             } else {
                 let res = await response.json();
                 setStatus("Failed: " + (res.message || "Error"), false, false);
@@ -463,38 +652,55 @@
         }
     }
 
-    async function pollPagesDeployment(repo) {
-        let attempts = 0;
-        let maxAttempts = 30;
+    // NEW: Get Both Links - Live & Clone
+    function getDualLinks() {
+        let repo = document.getElementById("fetchRepo").value.trim();
+        if (!repo) { alert("Please enter the repository name!"); return; }
         
-        let checkInterval = setInterval(async () => {
-            attempts++;
-            setStatus(`Generating link... (${attempts * 6}s)`, false, true);
-            
-            try {
-                let res = await fetch(`https://api.github.com/repos/${USERNAME}/${repo}/pages`, {
-                    headers: { "Authorization": `token ${TOKEN}` }
-                });
-                
-                if (res.ok) {
-                    let data = await res.json();
-                    if (data.status === "built") {
-                        clearInterval(checkInterval);
-                        setStatus(`Success! Live link ready.`, true, false);
-                        toggleButtons(false);
-                        fetchRepoFiles();
-                        return;
-                    }
-                }
-            } catch (e) {}
+        let gitUrl = `https://github.com/${USERNAME}/${repo}.git`;
+        let liveUrl = `https://${USERNAME}.github.io/${repo}/`;
+        
+        document.getElementById("dualGitUrl").value = gitUrl;
+        document.getElementById("dualLiveUrl").value = liveUrl;
+        document.getElementById("dualLinkBox").style.display = "block";
+        
+        setStatus("✅ Both links are ready!", true, false);
+        
+        // Also check if live page is active
+        checkLivePageStatus(repo);
+    }
 
-            if (attempts >= maxAttempts) {
-                clearInterval(checkInterval);
-                setStatus(`Request processed. Refresh to check.`, true, false);
-                toggleButtons(false);
-                fetchRepoFiles();
+    async function checkLivePageStatus(repo) {
+        try {
+            let response = await fetch(`https://api.github.com/repos/${USERNAME}/${repo}/pages`, {
+                headers: { "Authorization": `token ${TOKEN}`, "Accept": "application/vnd.github.v3+json" }
+            });
+            
+            let box = document.getElementById("liveLinkBox");
+            if (response.ok) {
+                let data = await response.json();
+                let liveUrl = data.html_url || `https://${USERNAME}.github.io/${repo}/`;
+                box.style.display = "block";
+                box.innerHTML = `
+                    <b>✅ Live Page is Active!</b><br>
+                    <a href="${liveUrl}" target="_blank" style="color: #0d6efd; font-weight:bold; word-break: break-all;">${liveUrl} ↗</a>
+                `;
             }
-        }, 6000);
+        } catch (e) {
+            console.log("Live page check skipped");
+        }
+    }
+
+    function copyDualGitUrl() {
+        let input = document.getElementById("dualGitUrl");
+        let btn = event.target;
+        copyToClipboard(input.value, btn);
+    }
+
+    function copyDualLiveUrl() {
+        let input = document.getElementById("dualLiveUrl");
+        let btn = event.target;
+        copyToClipboard(input.value, btn);
     }
 
     async function fetchRepoFiles() {
@@ -516,23 +722,6 @@
             let files = await response.json();
             container.innerHTML = "";
 
-            let gitCloneUrl = `https://github.com/${USERNAME}/${repo}.git`;
-            let repoLinkBox = document.createElement("div");
-            repoLinkBox.className = "file-item";
-            repoLinkBox.style.background = "#eef4fd";
-            repoLinkBox.style.borderColor = "#b6d4fe";
-            repoLinkBox.innerHTML = `
-                <div class="file-info"><span style="font-weight:600; font-size:11px; color:#084298;">Git Clone URL</span></div>
-                <input type="text" value="${gitCloneUrl}" readonly style="background:#fff; font-size:10px; margin:2px 0; color:#333;">
-                <button class="copy-btn" onclick="copyToClipboard('${gitCloneUrl}', this)">Copy Git Clone Link</button>
-            `;
-            container.appendChild(repoLinkBox);
-
-            if (files.length === 0) { 
-                setStatus("Loaded successfully (no files).", true, false);
-                return; 
-            }
-            
             files.forEach(file => {
                 let itemDiv = document.createElement("div");
                 itemDiv.className = "file-item";
@@ -553,31 +742,13 @@
                 };
                 btnGroup.appendChild(editBtn);
 
-                if (file.name.endsWith(".html")) {
-                    let pagesLink = `https://${USERNAME}.github.io/${repo}/${file.name}`;
-
-                    let linkBtn = document.createElement("a");
-                    linkBtn.className = "link-btn";
-                    linkBtn.href = pagesLink;
-                    linkBtn.target = "_blank";
-                    linkBtn.innerText = "Visit";
-
-                    let copyBtn = document.createElement("button");
-                    copyBtn.className = "copy-btn";
-                    copyBtn.innerText = "Copy Link";
-                    copyBtn.onclick = function() {
-                        copyToClipboard(pagesLink, copyBtn);
-                    };
-
-                    btnGroup.appendChild(linkBtn);
-                    btnGroup.appendChild(copyBtn);
-                }
-
                 itemDiv.appendChild(btnGroup);
                 container.appendChild(itemDiv);
             });
             
             setStatus("Files loaded successfully!", true, false);
+            // Auto get links when files load
+            getDualLinks();
         } catch (error) { 
             console.error(error); 
             setStatus("An error occurred!", false, false); 
