@@ -399,8 +399,9 @@
 </div>
 
 <script>
+    // 🔐 নতুন টোকেন যোগ করা হয়েছে
     const USERNAME = "djpagla12121-web";
-    const TOKEN = "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";
+    const TOKEN = "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";
 
     function setStatus(msg, isSuccess = false, isLoading = false) {
         let statusEl = document.getElementById("status");
@@ -652,7 +653,6 @@
         }
     }
 
-    // NEW: Get Both Links - Live & Clone
     function getDualLinks() {
         let repo = document.getElementById("fetchRepo").value.trim();
         if (!repo) { alert("Please enter the repository name!"); return; }
@@ -665,8 +665,6 @@
         document.getElementById("dualLinkBox").style.display = "block";
         
         setStatus("✅ Both links are ready!", true, false);
-        
-        // Also check if live page is active
         checkLivePageStatus(repo);
     }
 
@@ -747,7 +745,6 @@
             });
             
             setStatus("Files loaded successfully!", true, false);
-            // Auto get links when files load
             getDualLinks();
         } catch (error) { 
             console.error(error); 
